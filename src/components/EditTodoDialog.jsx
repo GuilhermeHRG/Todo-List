@@ -1,31 +1,30 @@
-import * as React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 
-const Transition = React.forwardRef((props, ref) => (
-  <Slide direction="up" ref={ref} {...props} />
-));
+export default function EditTodoDialog({ open, dialogHandler, editTodo, todo }) {
+    const [text, setText] = useState(todo.text);
 
-export default function EditTodoDialog({ open, dialogHandler, todo, editTodo }) {
-    const [editedText, setEditedText] = React.useState(todo.text);
-
-    React.useEffect(() => {
-        setEditedText(todo.text);
-    }, [todo]);
-
-    const textHandler = () => {
-        editTodo(todo.id, editedText);
+    const handleSave = () => {
+        editTodo(todo.id, text); // Chama a função de edição
         dialogHandler();
     };
 
     return (
-        <Dialog fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={dialogHandler}>
+        <Dialog open={open} onClose={dialogHandler}>
             <DialogTitle>Editar Tarefa</DialogTitle>
             <DialogContent>
-                <TextField fullWidth value={editedText} onChange={(e) => setEditedText(e.target.value)} />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Tarefa"
+                    fullWidth
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={dialogHandler}>Cancelar</Button>
-                <Button onClick={textHandler}>Salvar</Button>
+                <Button onClick={handleSave}>Salvar</Button>
             </DialogActions>
         </Dialog>
     );

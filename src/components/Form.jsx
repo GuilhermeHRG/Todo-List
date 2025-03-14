@@ -7,8 +7,7 @@ function Form({ addTodo }) {
 
     const todoCreate = () => {
         if (!text.trim()) return;
-
-        addTodo({ text, id: Date.now() });
+        addTodo(text);
         setText('');
     };
 

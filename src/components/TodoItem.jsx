@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, IconButton, Paper, Typography, Box } from '@mui/material';
+import React from 'react';
+import { Checkbox, IconButton, Paper, Typography, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EditTodoDialog from './EditTodoDialog';
@@ -17,6 +17,11 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
             hour: '2-digit', minute: '2-digit'
         });
     };
+
+    // Não renderiza a tarefa se estiver marcada como deletada
+    if (todo.deleted) {
+        return null;
+    }
 
     return (
         <>
@@ -51,18 +56,19 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                             '&.Mui-checked': { color: '#4caf50' },
                         }}
                     />
-                    <ListItemText
-                        primary={todo.text}
+                    <Typography
                         sx={{
                             textDecoration: todo.completed ? 'line-through' : 'none',
                             fontSize: '1rem',
                             fontWeight: 'bold',
                             color: todo.completed ? '#4caf50' : '#333',
                         }}
-                    />
+                    >
+                        {todo.text}
+                    </Typography>
                 </Box>
                 <Typography variant="caption" color="text.secondary" sx={{ mr: 2 }}>
-                    {formatDate(todo.updatedAt)}
+                    {todo.updatedAt ? formatDate(todo.updatedAt) : 'Data não disponível'}
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1 }}>
                     <IconButton color="primary" onClick={dialogHandler}>

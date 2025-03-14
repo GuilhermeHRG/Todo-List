@@ -1,8 +1,8 @@
-// Importando as funções necessárias do Firebase
+// firebaseConfig.js
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";  // Importando getFirestore
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-// Configuração do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAdwaQKjclkhW1YrZwwK5sdEyMDm6LVNck",
   authDomain: "todolist-ff81f.firebaseapp.com",
@@ -17,7 +17,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Obtendo a instância do Firestore
-const db = getFirestore(app);
+const db = getFirestore(app);  // Aqui você pega a instância do Firestore
 
 // Exportando o db (Firestore)
-export { db };
+export { db };  // Certifique-se de que o db está sendo exportado corretamente
+export const auth = getAuth(app); // Exporte o auth
+export const provider = new GoogleAuthProvider(); // Provedor do Google
