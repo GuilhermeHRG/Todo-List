@@ -158,7 +158,15 @@ function Home() {
     };
 
     return (
-        <Container  sx={{ textAlign: 'center', mt: 2, mb: 4, justifyContent: 'center', alignItems: 'center'  }}>
+        <Container
+            maxWidth="md"
+            sx={{
+                textAlign: 'center',
+                mt: 2,
+                mb: 4,
+                px: { xs: 2, sm: 3, md: 4 }, // Padding horizontal responsivo
+            }}
+        >
             {/* Cabeçalho com informações do usuário e botão de logout */}
             {user && (
                 <Paper
@@ -176,6 +184,7 @@ function Home() {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             gap: 2,
+                            flexDirection: { xs: 'column', sm: 'row' }, // Coluna em telas pequenas, linha em telas maiores
                         }}
                     >
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -197,7 +206,7 @@ function Home() {
                             variant="outlined"
                             color="error"
                             onClick={handleLogout}
-                            sx={{ textTransform: 'none' }}
+                            sx={{ textTransform: 'none', mt: { xs: 2, sm: 0 } }} // Margem superior em telas pequenas
                         >
                             Sair
                         </Button>
@@ -206,7 +215,13 @@ function Home() {
             )}
 
             {/* Título do Gerenciador de Tarefas */}
-            <Typography variant="h4" fontWeight="bold" color="white" gutterBottom>
+            <Typography
+                variant="h4"
+                fontWeight="bold"
+                color="white"
+                gutterBottom
+                sx={{ fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' } }} // Tamanho responsivo
+            >
                 Gerenciador de Tarefas
             </Typography>
 
@@ -217,19 +232,24 @@ function Home() {
             <ButtonGroup
                 variant="contained"
                 fullWidth
-                sx={{ mt: 3, mb: 3, boxShadow: 2 }}
+                sx={{
+                    mt: 3,
+                    mb: 3,
+                    boxShadow: 2,
+                    flexDirection: { xs: 'column', sm: 'row' }, // Coluna em telas pequenas, linha em telas maiores
+                }}
             >
                 <Button
                     onClick={() => setFilter("all")}
                     color={filter === "all" ? "primary" : "inherit"}
-                    sx={{ flex: 1 }}
+                    sx={{ flex: 1, mb: { xs: 1, sm: 0 } }} // Margem inferior em telas pequenas
                 >
                     Todas
                 </Button>
                 <Button
                     onClick={() => setFilter("pending")}
                     color={filter === "pending" ? "warning" : "inherit"}
-                    sx={{ flex: 1 }}
+                    sx={{ flex: 1, mb: { xs: 1, sm: 0 } }} // Margem inferior em telas pequenas
                 >
                     Pendentes
                 </Button>
@@ -245,7 +265,7 @@ function Home() {
             {/* Lista de tarefas */}
             <List sx={{ width: '100%' }}>
                 {filteredTodos.map((todo) => (
-                    <Box key={todo.id} sx={{ mt: 2 }}>
+                    <Box key={todo.id} sx={{ mt: 2, px: { xs: 1, sm: 2 } }}> {/* Padding horizontal responsivo */}
                         <TodoItem
                             todo={todo}
                             deleteTodo={handleDelete}

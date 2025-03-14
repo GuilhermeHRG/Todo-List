@@ -15,23 +15,65 @@ function Auth({ setUser }) {
     };
 
     return (
-        <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4, color: 'white', 
-         }}  style={{backgroundColor: 'rgba(226, 229, 226, 0.79)', color: 'black', padding: '2em', borderRadius: '0.5em'}}>
-            <Typography variant="h4" gutterBottom>
-                Faça login para continuar
-            </Typography>
-            <Box sx={{ mt: 4 }} >
-                <Button
-                    variant="contained"
-                    startIcon={<GoogleIcon />}
-                    onClick={handleLogin}
-                    size="large"
-                    style={{backgroundColor: 'rgb(21, 121, 25)'}}
+        <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh', // Ocupa toda a altura da tela
+                background: 'linear-gradient(135deg, #6a11cb, #2575fc)', // Gradiente moderno
+                padding: { xs: '1em', sm: '2em' }, // Padding responsivo
+            }}
+        >
+            <Container
+                maxWidth="sm"
+                sx={{
+                    textAlign: 'center',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Fundo semi-transparente
+                    color: 'black',
+                    padding: { xs: '1.5em', sm: '2.5em' }, // Padding responsivo
+                    borderRadius: '12px', // Bordas arredondadas
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Sombra suave
+                }}
+            >
+                {/* Título */}
+                <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{
+                        fontSize: { xs: '1.75rem', sm: '2.25rem' }, // Tamanho da fonte responsivo
+                        fontWeight: 'bold',
+                        color: 'black',
+                        mb: 3, // Margem inferior
+                    }}
                 >
-                    Entrar com Google
-                </Button>
-            </Box>
-        </Container>
+                    Faça login para continuar
+                </Typography>
+
+                {/* Botão de Login com Google */}
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<GoogleIcon />}
+                        onClick={handleLogin}
+                        size="large"
+                        sx={{
+                            backgroundColor: '#4285F4', // Cor do Google
+                            color: 'white',
+                            '&:hover': { backgroundColor: '#357ABD' }, // Efeito hover
+                            fontSize: { xs: '0.875rem', sm: '1rem' }, // Tamanho da fonte responsivo
+                            padding: { xs: '10px 20px', sm: '12px 24px' }, // Padding responsivo
+                            borderRadius: '8px', // Bordas arredondadas
+                            textTransform: 'none', // Remove uppercase
+                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Sombra suave
+                            width: { xs: '100%', sm: 'auto' }, // Largura total em telas pequenas
+                        }}
+                    >
+                        Entrar com Google
+                    </Button>
+                </Box>
+            </Container>
+        </Box>
     );
 }
 
