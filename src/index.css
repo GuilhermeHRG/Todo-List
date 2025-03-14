@@ -5,7 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(36, 60, 88); 
+  background: url('https://static.vecteezy.com/system/resources/previews/004/805/101/non_2x/subtle-blue-on-blue-new-year-repeatable-seamless-background-pattern-vector.jpg');
+  object-fit: 'cover';
+  background-position: 'center';
 }
 
 code {

@@ -10,7 +10,7 @@ export default function EditTodoDialog({ open, dialogHandler, editTodo, todo }) 
     };
 
     return (
-        <Dialog open={open} onClose={dialogHandler}>
+        <Dialog open={open} onClose={dialogHandler} fullWidth>
             <DialogTitle>Editar Tarefa</DialogTitle>
             <DialogContent>
                 <TextField

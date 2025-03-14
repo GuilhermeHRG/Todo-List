@@ -41,7 +41,7 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                         transform: 'scale(1.02)',
                         boxShadow: 6,
                     },
-                    width: '100%',
+                    maxWidth: '100%',
                 }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>

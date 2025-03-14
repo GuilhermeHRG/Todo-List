@@ -12,7 +12,7 @@ function Form({ addTodo }) {
     };
 
     return (
-        <Paper sx={{ padding: 2, display: 'flex', gap: 1 }}>
+        <Paper sx={{ padding: 2, display: 'flex', gap: 1,  }}>
             <TextField
                 label="Tarefa"
                 placeholder="..."

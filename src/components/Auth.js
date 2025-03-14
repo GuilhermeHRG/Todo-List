@@ -15,16 +15,18 @@ function Auth({ setUser }) {
     };
 
     return (
-        <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4 }}>
+        <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4, color: 'white', 
+         }}  style={{backgroundColor: 'rgba(226, 229, 226, 0.79)', color: 'black', padding: '2em', borderRadius: '0.5em'}}>
             <Typography variant="h4" gutterBottom>
                 Faça login para continuar
             </Typography>
-            <Box sx={{ mt: 4 }}>
+            <Box sx={{ mt: 4 }} >
                 <Button
                     variant="contained"
                     startIcon={<GoogleIcon />}
                     onClick={handleLogin}
                     size="large"
+                    style={{backgroundColor: 'rgb(21, 121, 25)'}}
                 >
                     Entrar com Google
                 </Button>

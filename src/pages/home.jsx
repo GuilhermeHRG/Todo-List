@@ -158,7 +158,7 @@ function Home() {
     };
 
     return (
-        <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 4, mb: 4 }}>
+        <Container  sx={{ textAlign: 'center', mt: 2, mb: 4, justifyContent: 'center', alignItems: 'center'  }}>
             {/* Cabeçalho com informações do usuário e botão de logout */}
             {user && (
                 <Paper
