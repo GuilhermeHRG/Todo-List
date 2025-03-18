@@ -39,7 +39,7 @@ function Home() {
         }
     };
 
-    const addNewTodo = async (text) => {
+    const addNewTodo = async (text, dueDate) => {
         if (!user) return;
     
         try {
@@ -47,6 +47,7 @@ function Home() {
                 text,
                 completed: false,
                 updatedAt: new Date().toISOString(),
+                dueDate: dueDate ? dueDate.toISOString() : null, // Converte para ISO string
                 userId: user.uid,
             };
     
@@ -257,8 +258,9 @@ function Home() {
                     onClick={() => setFilter("completed")}
                     color={filter === "completed" ? "success" : "inherit"}
                     sx={{ flex: 1 }}
+                
                 >
-                    Concluídas
+                    Concluídas 
                 </Button>
             </ButtonGroup>
 

@@ -22,10 +22,16 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
 
     const formatDate = (date) => {
         return new Date(date).toLocaleString('pt-BR', {
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
         });
     };
+
+    // Verifica se a tarefa está vencida
+    const isOverdue = todo.dueDate && new Date(todo.dueDate) < new Date();
 
     // Não renderiza a tarefa se estiver marcada como deletada
     if (todo.deleted) {
@@ -74,8 +80,29 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                         fontSize: '0.75rem', // Tamanho da fonte
                     }}
                 >
-                    {todo.updatedAt ? formatDate(todo.updatedAt) : 'Data não disponível'}
+                    Criado em: {todo.updatedAt ? formatDate(todo.updatedAt) : 'Data não disponível'}
                 </Typography>
+
+                {/* Data de Vencimento (Label) */}
+                {todo.dueDate && (
+                    <Typography
+                        variant="caption"
+                        color={isOverdue ? 'error' : 'black'} // Vermelho se estiver vencida
+                        sx={{
+                            position: 'absolute', // Posicionamento absoluto
+                            top: -12, // Ajuste para ficar acima do card
+                            left: 10, // Alinhado à borda esquerda do card
+                            backgroundColor: 'background.paper', // Fundo para destacar
+                            px: 1, // Padding horizontal
+                            borderRadius: '4px', // Bordas arredondadas
+                            boxShadow: 1, // Sombra suave
+                            zIndex: 1, // Garante que fique acima do card
+                            fontSize: '0.75rem', // Tamanho da fonte
+                        }}
+                    >
+                        Vence em: {formatDate(todo.dueDate)}
+                    </Typography>
+                )}
 
                 {/* Card da Tarefa */}
                 <Paper
@@ -86,9 +113,17 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         boxShadow: 3,
-                        backgroundColor: todo.completed ? '#e0f7fa' : '#ffffff',
+                        backgroundColor: isOverdue
+                            ? '#ffebee' // Vermelho claro para tarefas vencidas
+                            : todo.completed
+                            ? '#e0f7fa' // Azul claro para tarefas concluídas
+                            : '#ffffff', // Branco para tarefas pendentes
                         transition: 'all 0.3s ease-in-out',
-                        border: todo.completed ? '2px solid #00bcd4' : '2px solid transparent',
+                        border: isOverdue
+                            ? '2px solid #ff1744' // Borda vermelha para tarefas vencidas
+                            : todo.completed
+                            ? '2px solid #00bcd4' // Borda azul para tarefas concluídas
+                            : '2px solid transparent', // Sem borda para tarefas pendentes
                         '&:hover': {
                             transform: 'scale(1.02)',
                             boxShadow: 6,
@@ -105,8 +140,16 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                             checked={todo.completed}
                             onChange={() => toggleComplete(todo.id)}
                             sx={{
-                                color: todo.completed ? '#00bcd4' : 'default',
-                                '&.Mui-checked': { color: '#00bcd4' },
+                                color: isOverdue
+                                    ? '#ff1744' // Vermelho para tarefas vencidas
+                                    : todo.completed
+                                    ? '#00bcd4' // Azul para tarefas concluídas
+                                    : 'default',
+                                '&.Mui-checked': {
+                                    color: isOverdue
+                                        ? '#ff1744' // Vermelho para tarefas vencidas
+                                        : '#00bcd4', // Azul para tarefas concluídas
+                                },
                             }}
                         />
                         <Typography
@@ -115,7 +158,11 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                                 textDecoration: todo.completed ? 'line-through' : 'none',
                                 fontSize: { xs: '0.9rem', sm: '1rem' },
                                 fontWeight: 'bold',
-                                color: todo.completed ? '#00bcd4' : '#333',
+                                color: isOverdue
+                                    ? '#ff1744' // Vermelho para tarefas vencidas
+                                    : todo.completed
+                                    ? '#00bcd4' // Azul para tarefas concluídas
+                                    : '#333', // Preto para tarefas pendentes
                                 flexGrow: 1,
                                 mr: 2,
                                 cursor: 'pointer',
