@@ -1,16 +1,71 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url('https://static.vecteezy.com/system/resources/previews/004/805/101/non_2x/subtle-blue-on-blue-new-year-repeatable-seamless-background-pattern-vector.jpg');
-  object-fit: 'cover';
-  background-position: 'center';
+  
+  /* Novo background com gradiente e textura sutil */
+  
+  background: linear-gradient(135deg, rgba(30, 30, 40, 0.47) 0%, rgb(35, 35, 45) 100%),
+  ,url('https://img.freepik.com/vetores-premium/padrao-perfeito-de-folhas-quadradas-de-cadernos-de-rabiscos-desenhados-a-mao_200998-332.jpg?w=740');
+  background-size: cover;
+  color: #2d3436;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
+/* Melhorias para elementos de código */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  background: rgba(29, 0, 251, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  color: #6c5ce7;
+}
+
+/* Adicionando suporte para dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: 
+      linear-gradient(135deg, rgba(30, 30, 40, 0.47) 0%, rgb(35, 35, 45) 100%),
+      url('https://img.freepik.com/vetores-premium/padrao-perfeito-de-folhas-quadradas-de-cadernos-de-rabiscos-desenhados-a-mao_200998-332.jpg?w=740');
+    color: #f5f6fa;
+  }
+  
+  code {
+    background: rgba(108, 92, 231, 0.2);
+    color: #a29bfe;
+  }
+}
+
+/* Adicionando animação sutil de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+body {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(108, 92, 231, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(108, 92, 231, 0.4);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(108, 92, 231, 0.6);
 }
