@@ -1,12 +1,13 @@
-import { Container, List, Button, ButtonGroup, Typography, Avatar, Box, Paper } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Container, List, Button, ButtonGroup, Typography, Avatar, Box, Paper, Chip, Divider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import Form from '../components/Form';
 import TodoItem from '../components/TodoItem';
 import { addTodo, getTodos, deleteTodo, updateTodo } from '../firebaseService';
 import { auth } from '../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { Add, ExitToApp, FilterList } from '@mui/icons-material';
 function Home() {
     const [todos, setTodos] = useState([]);
     const [filter, setFilter] = useState("all");
@@ -41,7 +42,7 @@ function Home() {
 
     const addNewTodo = async (text, dueDate) => {
         if (!user) return;
-    
+
         try {
             const newTodo = {
                 text,
@@ -50,7 +51,7 @@ function Home() {
                 dueDate: dueDate ? dueDate.toISOString() : null, // Converte para ISO string
                 userId: user.uid,
             };
-    
+
             const todoId = await addTodo(newTodo); // Usa o ID gerado pelo Firestore
             setTodos([...todos, { ...newTodo, id: todoId }]); // Adiciona o ID ao estado local
         } catch (error) {
@@ -63,19 +64,19 @@ function Home() {
             console.error("Usuário não autenticado");
             return;
         }
-    
+
         try {
             const todo = todos.find(todo => todo.id === id);
             if (!todo) {
                 console.error("Tarefa não encontrada");
                 return;
             }
-    
+
             const updatedTodo = { ...todo, completed: !todo.completed, updatedAt: new Date().toISOString() };
-            
+
             // Atualiza no Firestore
             await updateTodo(id, { completed: updatedTodo.completed, updatedAt: updatedTodo.updatedAt });
-            
+
             // Atualiza o estado local
             setTodos(prevTodos => prevTodos.map(todo => todo.id === id ? updatedTodo : todo));
         } catch (error) {
@@ -104,10 +105,10 @@ function Home() {
             }
 
             const updatedTodo = { ...todo, text: newText, updatedAt: new Date().toISOString() };
-            
+
             // Atualiza no Firestore
             await updateTodo(id, { text: updatedTodo.text, updatedAt: updatedTodo.updatedAt });
-            
+
             // Atualiza o estado local
             setTodos(prevTodos => prevTodos.map(todo => todo.id === id ? updatedTodo : todo));
         } catch (error) {
@@ -120,20 +121,20 @@ function Home() {
             console.error("Usuário não autenticado");
             return;
         }
-    
+
         try {
             const todo = todos.find(todo => todo.id === id);
             if (!todo) {
                 console.error("Tarefa não encontrada");
                 return;
             }
-    
+
             // Marca a tarefa como deletada no Firestore
-            await updateTodo(id, { 
+            await updateTodo(id, {
                 deleted: true, // Marca como deletada
                 updatedAt: new Date().toISOString() // Atualiza a data de modificação
             });
-            
+
             // Atualiza o estado local
             setTodos(prevTodos => prevTodos.map(todo => todo.id === id ? { ...todo, deleted: true } : todo));
         } catch (error) {
@@ -163,120 +164,194 @@ function Home() {
             maxWidth="md"
             sx={{
                 textAlign: 'center',
-                mt: 2,
-                mb: 4,
-                px: { xs: 2, sm: 3, md: 4 }, // Padding horizontal responsivo
+                my: 4,
+                px: { xs: 2, sm: 3 },
+                animation: 'fadeIn 0.5s ease-in-out',
+                '@keyframes fadeIn': {
+                    from: { opacity: 0, transform: 'translateY(20px)' },
+                    to: { opacity: 1, transform: 'translateY(0)' }
+                }
             }}
         >
-            {/* Cabeçalho com informações do usuário e botão de logout */}
+            {/* User Profile Section */}
             {user && (
-                <Paper
-                    elevation={3}
-                    sx={{
-                        p: 2,
-                        mb: 4,
-                        borderRadius: 2,
-                        backgroundColor: 'background.paper',
-                    }}
-                >
-                    <Box
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mb: 4,
+                    p: 3,
+                    borderRadius: 3,
+                    background: 'rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                    backdropFilter: 'blur(8px)'
+                }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar
+                            alt={user.displayName || "Usuário"}
+                            src={user.photoURL}
+                            sx={{
+                                width: 54,
+                                height: 54,
+                                border: '2px solid',
+                                borderColor: 'primary.main'
+                            }}
+                        />
+                        <Box textAlign="left">
+                            <Typography variant="h6" fontWeight="600">
+                                {user.displayName || "Usuário"}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {user.email}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={handleLogout}
+                        startIcon={<ExitToApp />}
                         sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: 2,
-                            flexDirection: { xs: 'column', sm: 'row' }, // Coluna em telas pequenas, linha em telas maiores
+                            borderRadius: 2,
+                            px: 3,
+                            textTransform: 'none'
                         }}
                     >
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Avatar
-                                alt={user.displayName || "Usuário"}
-                                src={user.photoURL}
-                                sx={{ width: 48, height: 48 }}
-                            />
-                            <Box textAlign="left">
-                                <Typography variant="subtitle1" color="text.primary" fontWeight="bold">
-                                    {user.displayName || "Usuário"}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    {user.email}
-                                </Typography>
-                            </Box>
-                        </Box>
-                        <Button
-                            variant="outlined"
-                            color="error"
-                            onClick={handleLogout}
-                            sx={{ textTransform: 'none', mt: { xs: 2, sm: 0 } }} // Margem superior em telas pequenas
-                        >
-                            Sair
-                        </Button>
-                    </Box>
+                        Sair
+                    </Button>
+                </Box>
+            )}
+
+            {/* App Header */}
+            <Box sx={{ mb: 5 }}>
+                <Typography
+                    variant="h3"
+                    fontWeight="700"
+                    gutterBottom
+                    sx={{
+                        fontSize: { xs: '2rem', md: '2.5rem' },
+                        color: '#fff',
+                        mb: 1
+                    }}
+                >
+                    Minhas Tarefas
+                </Typography>
+                <Typography variant="body1" color="#fff">
+                    Organize sua vida em um só lugar
+                </Typography>
+            </Box>
+
+            {/* Add Task Section */}
+            <Paper
+                elevation={0}
+                sx={{
+                    p: 3,
+                    mb: 4,
+                    borderRadius: 3,
+                    boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05)'
+                }}
+            >
+                <Typography variant="h6" fontWeight="600" gutterBottom sx={{ textAlign: 'left' }}>
+                    Adicionar Tarefa
+                </Typography>
+                <Form addTodo={addNewTodo} />
+            </Paper>
+
+            {/* Filter Section */}
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mb: 3
+            }}>
+                <Typography variant="subtitle1" fontWeight="600" sx={{ display: 'flex', alignItems: 'center' }}>
+                    <FilterList sx={{ mr: 1 }} /> Filtros
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, color: '#fff' }}>
+                    <Chip
+                        label="Todas"
+                        onClick={() => setFilter("all")}
+                        color={filter === "all" ? "primary" : "default"}
+                        variant={filter === "all" ? "filled" : "outlined"}
+                        clickable
+                    />
+                    <Chip
+                        label="Pendentes"
+                        onClick={() => setFilter("pending")}
+                        color={filter === "pending" ? "warning" : "default"}
+                        variant={filter === "pending" ? "filled" : "outlined"}
+                        clickable
+                    />
+                    <Chip
+                        label="Concluídas"
+                        onClick={() => setFilter("completed")}
+                        color={filter === "completed" ? "success" : "default"}
+                        variant={filter === "completed" ? "filled" : "outlined"}
+                        clickable
+                    />
+                </Box>
+            </Box>
+
+            {/* Task List */}
+            {filteredTodos.length > 0 ? (
+                <Paper
+                    elevation={0}
+                    sx={{
+                        borderRadius: 3,
+                        overflow: 'hidden',
+                        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05)',
+                        backdropFilter: 'blur(8px)', // Efeito de desfoque no fundo
+                        border: '1px solid rgba(255, 255, 255, 0.07)' // Borda sutil
+                    }}
+                >
+                    <List sx={{ p: 0 }}>
+                        {filteredTodos.map((todo, index) => (
+                            <React.Fragment key={todo.id}>
+                                <Box sx={{
+                                    p: 2,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                        transform: 'translateX(4px)',
+                                    },
+                                }}>
+                                    <TodoItem
+                                        todo={todo}
+                                        deleteTodo={handleDelete}
+                                        editTodo={handleEditTodo}
+                                        toggleComplete={handleToggleComplete}
+                                    />
+                                </Box>
+                                {index < filteredTodos.length - 1 && <Divider />}
+                            </React.Fragment>
+                        ))}
+                    </List>
+                </Paper>
+            ) : (
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 4,
+                        textAlign: 'center',
+                        borderRadius: 3,
+                        backdropFilter: 'blur(8px)',
+                        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.38)'
+                    }}
+                >
+                    <Typography variant="body1" color="text.secondary">
+                        Nenhuma tarefa encontrada
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<Add />}
+                        onClick={() => setFilter("all")}
+                        sx={{ mt: 2, borderRadius: 2 }}
+                    >
+                        Criar primeira tarefa
+                    </Button>
                 </Paper>
             )}
 
-            {/* Título do Gerenciador de Tarefas */}
-            <Typography
-                variant="h4"
-                fontWeight="bold"
-                color="white"
-                gutterBottom
-                sx={{ fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' } }} // Tamanho responsivo
-            >
-                Gerenciador de Tarefas
-            </Typography>
-
-            {/* Formulário para adicionar tarefas */}
-            <Form addTodo={addNewTodo} />
-
-            {/* Botões de filtro */}
-            <ButtonGroup
-                variant="contained"
-                fullWidth
-                sx={{
-                    mt: 3,
-                    mb: 3,
-                    boxShadow: 2,
-                    flexDirection: { xs: 'column', sm: 'row' }, // Coluna em telas pequenas, linha em telas maiores
-                }}
-            >
-                <Button
-                    onClick={() => setFilter("all")}
-                    color={filter === "all" ? "primary" : "inherit"}
-                    sx={{ flex: 1, mb: { xs: 1, sm: 0 } }} // Margem inferior em telas pequenas
-                >
-                    Todas
-                </Button>
-                <Button
-                    onClick={() => setFilter("pending")}
-                    color={filter === "pending" ? "warning" : "inherit"}
-                    sx={{ flex: 1, mb: { xs: 1, sm: 0 } }} // Margem inferior em telas pequenas
-                >
-                    Pendentes
-                </Button>
-                <Button
-                    onClick={() => setFilter("completed")}
-                    color={filter === "completed" ? "success" : "inherit"}
-                    sx={{ flex: 1 }}
-                
-                >
-                    Concluídas 
-                </Button>
-            </ButtonGroup>
-
-            {/* Lista de tarefas */}
-            <List sx={{ width: '100%' }}>
-                {filteredTodos.map((todo) => (
-                    <Box key={todo.id} sx={{ mt: 2, px: { xs: 1, sm: 2 } }}> {/* Padding horizontal responsivo */}
-                        <TodoItem
-                            todo={todo}
-                            deleteTodo={handleDelete}
-                            editTodo={handleEditTodo}
-                            toggleComplete={handleToggleComplete}
-                        />
-                    </Box>
-                ))}
-            </List>
         </Container>
     );
 }

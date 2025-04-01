@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { Checkbox, IconButton, Paper, Typography, Box, Dialog, DialogContent, DialogActions, Button } from '@mui/material';
+import { Checkbox, IconButton, Paper, Typography, Box, Dialog, DialogContent, DialogActions, Button, Tooltip, Chip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EditTodoDialog from './EditTodoDialog';
+
+// Por isso:
+import CheckIcon from '@mui/icons-material/Check';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import EventIcon from '@mui/icons-material/Event';
+import UpdateIcon from '@mui/icons-material/Update';
+import RadioButtonUnchecked from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircle from '@mui/icons-material/CheckCircle';
 
 export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete }) {
     const [openDialog, setOpenDialog] = useState(false); // Para o diálogo de edição
@@ -41,49 +49,123 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
     return (
         <>
             {/* Diálogo de Edição */}
-            <EditTodoDialog open={openDialog} editTodo={editTodo} dialogHandler={dialogHandler} todo={todo} />
-    
-            {/* Diálogo de Texto Completo */}
-            <Dialog 
-                open={openTextDialog} 
+            <EditTodoDialog
+                open={openDialog}
+                editTodo={editTodo}
+                dialogHandler={dialogHandler}
+                todo={todo}
+            />
+
+            {/* Diálogo de Visualização de Texto */}
+            <Dialog
+                open={openTextDialog}
                 onClose={handleCloseTextDialog}
                 PaperProps={{
                     sx: {
-                        borderRadius: '12px',
-                        background: 'linear-gradient(145deg, #f5f7fa, #ffffff)',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                        minWidth: '300px'
+                        borderRadius: '16px',
+                        background: '#ffffff',
+                        boxShadow: '0 10px 50px rgba(0,0,0,0.15)',
+                        minWidth: '350px',
+                        maxWidth: '90vw',
+                        border: '1px solid rgba(0,0,0,0.05)'
                     }
                 }}
             >
-                <DialogContent>
-                    <Typography 
-                        variant="body1" 
-                        sx={{ 
+                <DialogContent sx={{ p: 3 }}>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        mb: 2,
+                        pb: 2,
+                        borderBottom: '1px solid rgba(0,0,0,0.05)'
+                    }}>
+                        <Box sx={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: '50%',
+                            bgcolor: todo.completed ? '#4caf50' : '#2196f3',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'white'
+                        }}>
+                            {todo.completed ? <CheckIcon /> : <AccessTimeIcon />}
+                        </Box>
+                        <Typography variant="h6" fontWeight="600">
+                            Detalhes da Tarefa
+                        </Typography>
+                    </Box>
+
+                    <Typography
+                        variant="body1"
+                        sx={{
                             wordBreak: 'break-word',
-                            padding: 2,
-                            color: '#333',
+                            p: 2,
+                            backgroundColor: 'rgba(0,0,0,0.02)',
+                            borderRadius: '8px',
                             fontSize: '1.1rem',
-                            lineHeight: 1.6
+                            lineHeight: 1.7
                         }}
                     >
                         {todo.text}
                     </Typography>
+
+                    {todo.dueDate && (
+                        <Box sx={{
+                            mt: 3,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            color: isOverdue ? '#f44336' : '#607d8b'
+                        }}>
+                            <EventIcon fontSize="small" />
+                            <Typography variant="body2">
+                                <strong>Vencimento:</strong> {formatDate(todo.dueDate)}
+                                {isOverdue && (
+                                    <Chip
+                                        label="Atrasado"
+                                        size="small"
+                                        sx={{
+                                            ml: 1,
+                                            backgroundColor: '#ffebee',
+                                            color: '#f44336'
+                                        }}
+                                    />
+                                )}
+                            </Typography>
+                        </Box>
+                    )}
+
+<Box sx={{
+    mt: 2,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+    p: '8px 12px',
+    borderRadius: '8px',
+    backgroundColor: '#f5f5f5', // Cinza claro
+    border: '1px solid #e0e0e0' // Borda sutil
+}}>
+    <UpdateIcon fontSize="small" sx={{ color: '#607d89' }} />
+    <Typography variant="body2" sx={{ color: '#424242' }}>
+        <strong>Criado em:</strong> {todo.updatedAt ? formatDate(todo.updatedAt) : 'N/A'}
+    </Typography>
+</Box>
                 </DialogContent>
-                <DialogActions sx={{ padding: 2 }}>
-                    <Button 
-                        onClick={handleCloseTextDialog} 
+                <DialogActions sx={{ p: 3, pt: 0 }}>
+                    <Button
+                        onClick={handleCloseTextDialog}
+                        variant="contained"
                         sx={{
-                            background: 'linear-gradient(45deg, #6c5ce7, #a29bfe)',
-                            color: 'white',
-                            borderRadius: '8px',
-                            padding: '8px 20px',
+                            borderRadius: '12px',
+                            px: 3,
+                            py: 1,
                             textTransform: 'none',
-                            fontWeight: 600,
-                            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                            fontWeight: 500,
+                            backgroundColor: '#6c5ce7',
                             '&:hover': {
-                                background: 'linear-gradient(45deg, #5649c0, #8c7ae6)',
-                                boxShadow: '0 6px 8px rgba(0,0,0,0.15)'
+                                backgroundColor: '#5649c0'
                             }
                         }}
                     >
@@ -91,187 +173,189 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                     </Button>
                 </DialogActions>
             </Dialog>
-    
-            {/* Container do Item */}
+
+            {/* Item de Tarefa */}
             <Box
                 sx={{
                     position: 'relative',
-                    mb: 3,
+                    mb: 2,
+                    transition: 'all 0.3s ease',
                     '&:hover': {
-                        '& .date-label': {
-                            transform: 'translateY(-2px)',
-                            boxShadow: 3
+                        transform: 'translateY(-3px)',
+                        '& .task-actions': {
+                            opacity: 1
                         }
                     }
                 }}
             >
-                {/* Data de Modificação */}
-                <Typography
-                    variant="caption"
-                    className="date-label"
-                    sx={{
-                        position: 'absolute',
-                        top: -18,
-                        right: 0,
-                        backgroundColor: '#6c5ce7',
-                        color: 'white',
-                        px: 1.5,
-                        py: 0.5,
-                        borderRadius: '8px',
-                        boxShadow: 1,
-                        zIndex: 1,
-                        fontSize: '0.7rem',
-                        fontWeight: 600,
-                        transition: 'all 0.2s ease',
-                       
-                    }}
-                >
-                    Criado: {todo.updatedAt ? formatDate(todo.updatedAt) : 'N/A'}
-                </Typography>
-    
-                {/* Data de Vencimento */}
-                {todo.dueDate && (
-                    <Typography
-                        variant="caption"
-                        className="date-label"
+                {/* Status Badges */}
+                <Box sx={{
+                    position: 'absolute',
+                    top: -12,
+                    left: 16,
+                    right: 16,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    zIndex: 1
+                }}>
+                    {todo.dueDate && (
+                        <Chip
+                            label={`Vence: ${formatDate(todo.dueDate)}`}
+                            size="small"
+                            sx={{
+                                fontSize: '0.65rem',
+                                fontWeight: 600,
+                                backgroundColor: isOverdue ? '#ffebee' : '#e3f2fd',
+                                color: isOverdue ? '#f44336' : '#1976d2',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                height: 24
+                            }}
+                        />
+                    )}
+
+                    <Chip
+                        label={`Criado: ${todo.updatedAt ? formatDate(todo.updatedAt) : 'N/A'}`}
+                        size="small"
                         sx={{
-                            position: 'absolute',
-                            top: -18,
-                            left: 0,
-                            backgroundColor: isOverdue ? '#ff4757' : 'rgb(152, 12, 12)',
-                            color: 'white',
-                            px: 1.5,
-                            py: 0.5,
-                            borderRadius: '6px',
-                            boxShadow: 1,
-                            zIndex: 1,
-                            fontSize: '0.7rem',
+                            fontSize: '0.65rem',
                             fontWeight: 600,
-                            transition: 'all 0.2s ease'
+                            backgroundColor: 'rgba(0,0,0,0.05)',
+                            color: 'rgba(0,0,0,0.7)',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                            height: 24
                         }}
-                    >
-                        Vence: {formatDate(todo.dueDate)}
-                    </Typography>
-                )}
-    
-                {/* Card da Tarefa */}
+                    />
+                </Box>
+
+                {/* Card Principal */}
                 <Paper
                     sx={{
-                        padding: { xs: 1.5, sm: 1.5 },
+                        p: 2,
                         borderRadius: '14px',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                        background: todo.completed 
-                            ? 'linear-gradient(135deg, #f0f9ff, #e0f7fa)' 
-                            : isOverdue 
-                                ? 'linear-gradient(135deg, #fff0f0, #ffebee)'
-                                : 'linear-gradient(135deg, #f9f9f9, #ffffff)',
-                        transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
-                        borderLeft: isOverdue
-                            ? '4px solid #ff4757'
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                        background: '#ffffff',
+                        borderLeft: '4px solid',
+                        borderColor: isOverdue
+                            ? '#f44336'
                             : todo.completed
-                                ? '4px solid #00bcd4'
-                                : '4px solid #6c5ce7',
+                                ? '#4caf50'
+                                : '#2196f3',
+                        position: 'relative',
+                        overflow: 'hidden',
                         '&:hover': {
-                            transform: 'translateY(-2px)',
-                            boxShadow: '0 6px 24px rgba(0,0,0,0.12)',
-                        },
-                        maxWidth: '100%',
-                        overflow: 'hidden'
+                            boxShadow: '0 6px 16px rgba(0,0,0,0.1)'
+                        }
                     }}
                 >
-                    {/* Checkbox e Texto */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, minWidth: 0 }}>
-                        <Checkbox
-                            edge="start"
-                            tabIndex={-1}
-                            disableRipple
-                            checked={todo.completed}
-                            onChange={() => toggleComplete(todo.id)}
-                            sx={{
-                                color: isOverdue
-                                    ? '#ff4757'
-                                    : todo.completed
-                                        ? '#00bcd4'
-                                        : '#6c5ce7',
-                                '&.Mui-checked': {
-                                    color: isOverdue ? '#ff4757' : '#00bcd4',
-                                },
-                                padding: { xs: 1, sm: 1.5 },
-                                '& .MuiSvgIcon-root': {
-                                    fontSize: { xs: '1.5rem', sm: '1.75rem' }
-                                }
-                            }}
-                        />
+                    {/* Checkbox */}
+                    <Checkbox
+                        checked={todo.completed}
+                        onChange={() => toggleComplete(todo.id)}
+                        icon={<RadioButtonUnchecked />}
+                        checkedIcon={<CheckCircle />}
+                        sx={{
+                            color: isOverdue ? '#f44336' : '#2196f3',
+                            '&.Mui-checked': {
+                                color: '#4caf50',
+                            },
+                            p: 1.5,
+                            '& .MuiSvgIcon-root': {
+                                fontSize: '1.8rem'
+                            }
+                        }}
+                    />
+
+                    {/* Texto da Tarefa */}
+                    <Box
+                        onClick={handleTextClick}
+                        sx={{
+                            flexGrow: 1,
+                            minWidth: 0,
+                            mr: 2,
+                            cursor: 'pointer',
+                            position: 'relative'
+                        }}
+                    >
                         <Typography
-                            onClick={handleTextClick}
                             sx={{
-                                textDecoration: todo.completed ? 'line-through' : 'none',
-                                fontSize: { xs: '0.95rem', sm: '1.1rem' },
+                                fontSize: '1.05rem',
                                 fontWeight: todo.completed ? 500 : 600,
                                 color: isOverdue
-                                    ? '#ff4757'
+                                    ? '#f44336'
                                     : todo.completed
-                                        ? '#00bcd4'
-                                        : '#333',
-                                flexGrow: 1,
-                                mr: 2,
-                                cursor: 'pointer',
+                                        ? '#4caf50'
+                                        : 'text.primary',
+                                textDecoration: todo.completed ? 'line-through' : 'none',
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                maxWidth: { xs: '180px', sm: '400px', md: '500px' },
-                                transition: 'all 0.2s ease',
-                                '&:hover': {
-                                    color: isOverdue 
-                                        ? '#ff6b81' 
-                                        : todo.completed 
-                                            ? '#26c6da' 
-                                            : '#6c5ce7'
-                                }
+                                pr: 1,
+                                transition: 'all 0.2s ease'
                             }}
                         >
                             {todo.text}
                         </Typography>
+
+                        {todo.completed && (
+                            <Box sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: 0,
+                                right: 0,
+                                height: '1px',
+                                backgroundColor: '#4caf50',
+                                transform: 'translateY(-50%)',
+                                opacity: 0.3
+                            }} />
+                        )}
                     </Box>
-    
-                    {/* Botões de Ação */}
-                    <Box sx={{ 
-                        display: 'flex', 
-                        gap: 1,
-                        '& .MuiIconButton-root': {
-                            transition: 'all 0.2s ease',
-                            borderRadius: '10px'
-                        }
-                    }}>
-                        <IconButton
-                            onClick={dialogHandler}
-                            sx={{
-                                backgroundColor: 'rgba(108, 92, 231, 0.1)',
-                                color: '#6c5ce7',
-                                '&:hover': { 
-                                    backgroundColor: 'rgba(108, 92, 231, 0.2)',
-                                    transform: 'scale(1.1)'
-                                },
-                            }}
-                        >
-                            <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                            onClick={() => deleteTodo(todo.id)}
-                            sx={{
-                                backgroundColor: 'rgba(255, 71, 87, 0.1)',
-                                color: '#ff4757',
-                                '&:hover': { 
-                                    backgroundColor: 'rgba(255, 71, 87, 0.2)',
-                                    transform: 'scale(1.1)'
-                                },
-                            }}
-                        >
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
+
+                    {/* Ações */}
+                    <Box
+                        className="task-actions"
+                        sx={{
+                            display: 'flex',
+                            gap: 0.5,
+                            opacity: { xs: 1, sm: 0.7 },
+                            transition: 'opacity 0.2s ease',
+                            '&:hover': {
+                                opacity: 1
+                            }
+                        }}
+                    >
+                        <Tooltip title="Editar">
+                            <IconButton
+                                onClick={dialogHandler}
+                                size="small"
+                                sx={{
+                                    color: '#2196f3',
+                                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(33, 150, 243, 0.2)'
+                                    }
+                                }}
+                            >
+                                <EditIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Excluir">
+                            <IconButton
+                                onClick={() => deleteTodo(todo.id)}
+                                size="small"
+                                sx={{
+                                    color: '#f44336',
+                                    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(244, 67, 54, 0.2)'
+                                    }
+                                }}
+                            >
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 </Paper>
             </Box>
