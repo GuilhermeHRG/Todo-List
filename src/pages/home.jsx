@@ -1,19 +1,40 @@
-import { Container, List, Button, ButtonGroup, Typography, Avatar, Box, Paper, Chip, Divider } from '@mui/material';
+import { Container, List, Button, Typography, Avatar, Box, Paper, Chip, Divider } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Form from '../components/Form';
 import TodoItem from '../components/TodoItem';
-import { addTodo, getTodos, deleteTodo, updateTodo } from '../firebaseService';
+import { addTodo, getTodos, updateTodo } from '../firebaseService';
 import { auth } from '../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Add, ExitToApp, FilterList } from '@mui/icons-material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 function Home() {
     const [todos, setTodos] = useState([]);
     const [filter, setFilter] = useState("all");
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
+    const theme = createTheme({
+        components: {
+            MuiChip: {
+                styleOverrides: {
+                    colorPrimary: {
+                        color: '#fff',
+                    },
+                    colorWarning: {
+                        color: '#fff',
+                    },
+                    colorSuccess: {
+                        color: '#fff',
+                    },
+                    colorDefault: {
+                        backgroundColor: '#e0e0e0',
+                    }
+                }
+            }
+        }
+    });
     // Verifica se o usuário está autenticado ao carregar o componente
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -165,7 +186,7 @@ function Home() {
             sx={{
                 textAlign: 'center',
                 my: 4,
-                px: { xs: 2, sm: 3 },
+                px: { xs: 1, sm: 3 },
                 animation: 'fadeIn 0.5s ease-in-out',
                 '@keyframes fadeIn': {
                     from: { opacity: 0, transform: 'translateY(20px)' },
@@ -179,12 +200,14 @@ function Home() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    flexWrap: 'wrap',
                     mb: 4,
                     p: 3,
                     borderRadius: 3,
                     background: 'rgba(255, 255, 255, 0.9)',
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-                    backdropFilter: 'blur(8px)'
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 1)',
+                    backdropFilter: 'blur(8px)',
+                    color: '#000'
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
@@ -264,32 +287,34 @@ function Home() {
                 justifyContent: 'space-between',
                 mb: 3
             }}>
-                <Typography variant="subtitle1" fontWeight="600" sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="subtitle1" fontWeight="600" sx={{ display: 'flex', alignItems: 'center', color: '#fff' }}>
                     <FilterList sx={{ mr: 1 }} /> Filtros
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 1, color: '#fff' }}>
-                    <Chip
-                        label="Todas"
-                        onClick={() => setFilter("all")}
-                        color={filter === "all" ? "primary" : "default"}
-                        variant={filter === "all" ? "filled" : "outlined"}
-                        clickable
-                    />
-                    <Chip
-                        label="Pendentes"
-                        onClick={() => setFilter("pending")}
-                        color={filter === "pending" ? "warning" : "default"}
-                        variant={filter === "pending" ? "filled" : "outlined"}
-                        clickable
-                    />
-                    <Chip
-                        label="Concluídas"
-                        onClick={() => setFilter("completed")}
-                        color={filter === "completed" ? "success" : "default"}
-                        variant={filter === "completed" ? "filled" : "outlined"}
-                        clickable
-                    />
-                </Box>
+                <ThemeProvider theme={theme}>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Chip
+                            label="Todas"
+                            onClick={() => setFilter("all")}
+                            color={filter === "all" ? "primary" : "default"}
+                            variant="filled"
+                            clickable
+                        />
+                        <Chip
+                            label="Pendentes"
+                            onClick={() => setFilter("pending")}
+                            color={filter === "pending" ? "warning" : "default"}
+                            variant="filled"
+                            clickable
+                        />
+                        <Chip
+                            label="Concluídas"
+                            onClick={() => setFilter("completed")}
+                            color={filter === "completed" ? "success" : "default"}
+                            variant="filled"
+                            clickable
+                        />
+                    </Box>
+                </ThemeProvider>
             </Box>
 
             {/* Task List */}
@@ -300,8 +325,9 @@ function Home() {
                         borderRadius: 3,
                         overflow: 'hidden',
                         boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05)',
-                        backdropFilter: 'blur(8px)', // Efeito de desfoque no fundo
-                        border: '1px solid rgba(255, 255, 255, 0.07)' // Borda sutil
+                        background: 'rgba(180, 231, 255, 0)', // Transparência aumentada (0.7)
+                        backdropFilter: 'blur(3px)', // Efeito de desfoque no fundo
+                        border: '1px solid rgba(146, 143, 143, 0.52)' // Borda sutil
                     }}
                 >
                     <List sx={{ p: 0 }}>
@@ -334,7 +360,7 @@ function Home() {
                         textAlign: 'center',
                         borderRadius: 3,
                         backdropFilter: 'blur(8px)',
-                        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05)',
+                        boxShadow: '0 4px 24px rgba(37, 36, 36, 0.05)',
                         border: '1px solid rgba(255, 255, 255, 0.38)'
                     }}
                 >

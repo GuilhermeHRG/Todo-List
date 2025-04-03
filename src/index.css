@@ -7,10 +7,9 @@ body {
   
   /* Novo background com gradiente e textura sutil */
   
-  background: linear-gradient(135deg, rgba(30, 30, 40, 0.47) 0%, rgb(35, 35, 45) 100%),
-  ,url('https://img.freepik.com/vetores-premium/padrao-perfeito-de-folhas-quadradas-de-cadernos-de-rabiscos-desenhados-a-mao_200998-332.jpg?w=740');
+  background: linear-gradient(135deg, rgba(254, 254, 254, 0.47) 0%, rgb(255, 255, 255) 100%),
+  ,url('https://img.freepik.com/vetores-gratis/desenho-de-papel-de-carta-branco-em-branco_53876-118304.jpg?t=st=1743641548~exp=1743645148~hmac=7a96ef79f69a710dc0fce8eaf0fea9372d43788536870ae5201a732ec074b2e6&w=740');
   background-size: cover;
-  color: #2d3436;
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -29,8 +28,8 @@ code {
 @media (prefers-color-scheme: dark) {
   body {
     background: 
-      linear-gradient(135deg, rgba(30, 30, 40, 0.47) 0%, rgb(35, 35, 45) 100%),
-      url('https://img.freepik.com/vetores-premium/padrao-perfeito-de-folhas-quadradas-de-cadernos-de-rabiscos-desenhados-a-mao_200998-332.jpg?w=740');
+      linear-gradient(135deg, rgba(30, 30, 40, 0.47) 0%, rgb(255, 255, 255) 100%),
+      url('https://img.freepik.com/vetores-gratis/desenho-de-papel-de-carta-branco-em-branco_53876-118304.jpg?t=st=1743641548~exp=1743645148~hmac=7a96ef79f69a710dc0fce8eaf0fea9372d43788536870ae5201a732ec074b2e6&w=740');
     color: #f5f6fa;
   }
   
@@ -62,7 +61,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(108, 92, 231, 0.4);
+  background: rgb(0, 0, 0);
   border-radius: 10px;
 }
 
