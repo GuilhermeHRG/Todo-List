@@ -325,7 +325,7 @@ function Home() {
                         borderRadius: 3,
                         overflow: 'hidden',
                         boxShadow: '0 4px 24px rgba(0, 0, 0, 0.05)',
-                        background: 'rgba(180, 231, 255, 0)', // Transparência aumentada (0.7)
+                        background: 'rgb(255, 255, 255)', // Transparência aumentada (0.7)
                         backdropFilter: 'blur(3px)', // Efeito de desfoque no fundo
                         border: '1px solid rgba(146, 143, 143, 0.52)' // Borda sutil
                     }}
@@ -335,12 +335,14 @@ function Home() {
                             <React.Fragment key={todo.id}>
                                 <Box sx={{
                                     p: 2,
+                                    
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
                                         transform: 'translateX(4px)',
                                     },
                                 }}>
                                     <TodoItem
+                                    
                                         todo={todo}
                                         deleteTodo={handleDelete}
                                         editTodo={handleEditTodo}
@@ -360,7 +362,7 @@ function Home() {
                         textAlign: 'center',
                         borderRadius: 3,
                         backdropFilter: 'blur(8px)',
-                        boxShadow: '0 4px 24px rgba(37, 36, 36, 0.05)',
+                        boxShadow: '0 4px 24px rgba(37, 36, 36, 0.84)',
                         border: '1px solid rgba(255, 255, 255, 0.38)'
                     }}
                 >

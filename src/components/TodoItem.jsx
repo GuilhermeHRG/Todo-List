@@ -68,7 +68,7 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                     PaperProps={{
                         sx: {
                             borderRadius: '16px',
-                            background: '#ffffff',
+                            background: '#ffff',
                             boxShadow: '0 10px 50px rgba(0,0,0,0.15)',
                             minWidth: '350px',
                             maxWidth: '90vw',
@@ -76,10 +76,11 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                         }
                     }}
                 >
-                    <DialogContent sx={{ p: 3 }}>
+                    <DialogContent sx={{ p: 3,  }}>
                         <Box sx={{
                             display: 'flex',
                             alignItems: 'center',
+                            
                             gap: 2,
                             mb: 2,
                             pb: 2,
@@ -107,10 +108,11 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                             sx={{
                                 wordBreak: 'break-word',
                                 p: 2,
-                                backgroundColor: 'rgba(0,0,0,0.02)',
+                                backgroundColor: 'rgba(233, 13, 13, 0.02)',
                                 borderRadius: '8px',
                                 fontSize: '1.1rem',
-                                lineHeight: 1.7
+                                lineHeight: 1.7,
+                                color: '#000'
                             }}
                         >
                             {todo.text}
@@ -122,10 +124,15 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 1,
-                                color: isOverdue ? '#f44336' : '#607d8b'
-                            }}>
+                                color: isOverdue ? '#d23a' : '#607d8b',
+                                mb: 2,
+                                p: '8px 12px',
+                                borderRadius: '8px',
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                }}>
                                 <EventIcon fontSize="small" />
-                                <Typography variant="body2">
+                                <Typography variant="body2" >
                                     <strong>Vencimento:</strong> {formatDate(todo.dueDate)}
                                     {isOverdue && (
                                         <Chip
@@ -133,8 +140,16 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                                             size="small"
                                             sx={{
                                                 ml: 1,
-                                                backgroundColor: '#ffebee',
-                                                color: '#f44336'
+                                                color: '#000',
+                                                mb: 2,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 1,
+                                                p: '8px 12px',
+                                                borderRadius: '8px',
+                                                border: '1px solid',
+                                                borderColor: 'divider',
+                                                backgroundColor: 'rgba(241, 9, 9, 0.15)',
                                             }}
                                         />
                                     )}
@@ -154,7 +169,7 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                         }}>
                             <UpdateIcon fontSize="small" color="action" />
                             <Typography variant="body2" color="text.secondary">
-                                <strong>Criado em:</strong> {todo.updatedAt ? formatDate(todo.updatedAt) : 'N/A'}
+                                <strong>Última alteração:</strong> {todo.updatedAt ? formatDate(todo.updatedAt) : 'N/A'}
                             </Typography>
                         </Box>
                     </DialogContent>
@@ -184,6 +199,7 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                     sx={{
                         position: 'relative',
                         mb: 2,
+                        
                         transition: 'all 0.3s ease',
                         '&:hover': {
                             transform: 'translateY(-3px)',
@@ -208,11 +224,10 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                                 label={`Vence: ${formatDate(todo.dueDate)}`}
                                 size="small"
                                 sx={{
-                                    fontSize: '0.65rem',
+                                    fontSize: '0.70rem',
                                     fontWeight: 600,
-                                    backgroundColor: isOverdue ? '#ffebee' : '#e3f2fd',
+                                    backgroundColor: isOverdue ? '#ffebee' : '#39393',
                                     color: isOverdue ? '#f44336' : '#1976d2',
-                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                                     height: 24
                                 }}
                             />
@@ -222,11 +237,10 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                             label={`Criado: ${todo.updatedAt ? formatDate(todo.updatedAt) : 'N/A'}`}
                             size="small"
                             sx={{
-                                fontSize: '0.65rem',
+                                fontSize: '0.70rem',
                                 fontWeight: 600,
-                                backgroundColor: 'rgba(0,0,0,0.05)',
-                                color: 'rgba(0,0,0,0.7)',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                backgroundColor: 'rgba(44, 6, 65, 0.86)',
+                                color: 'rgb(236, 236, 236)',
                                 height: 24
                             }}
                         />
@@ -239,8 +253,8 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                             borderRadius: '14px',
                             display: 'flex',
                             alignItems: 'center',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-                            background: '#ffffff',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.34)',
+                            background: 'rgba(239, 239, 238, 0.29)',
                             borderLeft: '4px solid',
                             borderColor: isOverdue
                                 ? '#f44336'
@@ -250,7 +264,7 @@ export default function TodoItem({ todo, deleteTodo, editTodo, toggleComplete })
                             position: 'relative',
                             overflow: 'hidden',
                             '&:hover': {
-                                boxShadow: '0 6px 16px rgba(0,0,0,0.1)'
+                                boxShadow: '0 6px 16px rgba(0, 0, 0, 0.37)'
                             }
                         }}
                     >
